@@ -1,0 +1,76 @@
+<%
+if (theme.index.slogan.enable) {
+  page.subtitle = theme.index.slogan.text || config.subtitle || ''
+}
+page.banner_img = theme.index.banner_img
+page.banner_img_height = theme.index.banner_img_height
+page.banner_mask_alpha = theme.index.banner_mask_alpha
+%>
+
+  <div style="text-align: center; margin: 2em auto 6em auto;">
+    <img src="<%= url_for('/img/huishao.png') %>" alt="avatar" style="width:100px; height:100px; border-radius: 50%;">
+    <!-- <h2 style="margin-top: 1em;">你好，我是 Shao Hui</h2> -->
+    <p style="font-size: 1.1em; color: #c40c71;margin-top: 1.5em;">Linux 爱好者 | 编程玩家 | 游戏玩家</p>
+  </div>
+
+  <% page.posts.each(function (post) { %>
+    <% var post_url=url_for(post.path); var index_img=post.index_img || theme.post.default_index_img; var
+      has_custom_img=!!post.index_img; %>
+
+      <div class="index-card <%= has_custom_img ? 'has-img' : 'no-cover' %>" <% if (has_custom_img) { %>
+        style="background-image: url('<%= url_for(index_img) %>');"
+          <% } %>
+            >
+            <article class="card-content">
+              <!-- 标题 -->
+              <h2 class="index-header">
+                <% if (theme.index.post_sticky && theme.index.post_sticky.enable && post.sticky> 0) { %>
+                  <i class="index-pin <%= theme.index.post_sticky.icon %>" title="置顶文章"></i>
+                  <% } %>
+                    <a href="<%= post_url %>" target="<%- theme.index.post_url_target %>" class="post-title-link">
+                      <%= post.title %>
+                    </a>
+              </h2>
+
+              <!-- 摘要 -->
+              <% var excerpt=post.description || post.excerpt || (theme.index.auto_excerpt.enable && !post.encrypt &&
+                post.content) %>
+                <a class="index-excerpt" href="<%= post_url %>" target="<%- theme.index.post_url_target %>">
+                  <div>
+                    <%- strip_html(excerpt).substring(0, 100).trim().replace(/\n/g, ' ' ) %>
+                  </div>
+                </a>
+
+                
+                <div class="post-meta-bar">
+                  <% if (theme.index.post_meta.date) { %>
+                    <div class="post-meta">
+                      <i class="iconfont icon-date"></i>
+                      <time datetime="<%= full_date(post.date, 'YYYY-MM-DD HH:mm') %>" pubdate>
+                        <%- date(post.date, config.date_format) %>
+                      </time>
+                    </div>
+                    <% } %>
+
+                      <% if (theme.index.post_meta.category && post.categories.length> 0) { %>
+                        <div class="post-meta">
+                          <i class="iconfont icon-category"></i>
+                          <%- partial('_partials/category-chains', { categories: post.categories, limit: 1 }) %>
+                        </div>
+                        <% } %>
+
+                          <% if (theme.index.post_meta.tag && post.tags.length> 0) { %>
+                            <div class="post-meta">
+                              <i class="iconfont icon-tags"></i>
+                              <% post.tags.each(function(tag) { %>
+                                <a href="<%= url_for(tag.path) %>">#<%- tag.name %></a>
+                                <% }) %>
+                            </div>
+                            <% } %>
+                            
+                </div>
+            </article>
+      </div>
+      <% }) %>
+
+<%- partial('_partials/paginator') %>

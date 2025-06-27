@@ -1,0 +1,114 @@
+// --------------------------------------
+// Fluid
+// https://github.com/fluid-dev/hexo-theme-fluid
+// --------------------------------------
+
+@import "_variables/base"
+for $inject_variable in hexo-config("injects.variable")
+  @import $inject_variable;
+
+@import "_functions/base"
+
+@import "_mixins/base"
+for $inject_mixin in hexo-config("injects.mixin")
+  @import $inject_mixin;
+
+@import "_pages/pages"
+
+for $inject_style in hexo-config("injects.style")
+  @import $inject_style;
+
+
+/* 卡片通用样式 */
+.index-card {
+  padding: 50px 20px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* 加入 hover 过渡效果 */
+}
+
+/* 鼠标悬停时，卡片微浮 + 阴影 */
+.index-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* 有封面图时 */
+.index-card.has-img {
+  background-size: cover;
+  background-position: center;
+  color: white;
+}
+
+/* 无封面图时 */
+.index-card.no-cover {
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  color: #000;
+}
+
+/* 卡片内容布局 */
+.card-content {
+  max-width: 900px;
+  width: 100%;
+}
+
+/* 标题链接动画 */
+.post-title-link {
+  color: #222;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.post-title-link:hover {
+  color: #1e90ff;
+}
+
+/* 摘要样式（加动画） */
+.index-excerpt {
+  color: #000;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+.index-card:hover .index-excerpt {
+  opacity: 0.85;
+}
+
+/* 元信息栏 */
+.post-meta-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  margin-top: 10px;
+  color: inherit;
+}
+
+/* 每项元信息 */
+.post-meta {
+  display: flex;
+  align-items: center;
+}
+
+.post-meta i {
+  margin-right: 4px;
+}
+
+/* 标签链接悬停变色 */
+.post-meta a {
+  margin-right: 6px;
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.post-meta a:hover {
+  color: #1e90ff;
+}
+

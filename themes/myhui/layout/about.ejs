@@ -1,0 +1,86 @@
+<%
+page.layout = "about"
+page.title = theme.about.title || __('about.title')
+page.subtitle = theme.about.subtitle || __('about.subtitle')
+page.banner_img = page.banner_img || theme.about.banner_img
+page.banner_img_height = page.banner_img_height || theme.about.banner_img_height
+page.banner_mask_alpha = page.banner_mask_alpha || theme.about.banner_mask_alpha
+%>
+
+<div class="text-center">
+  <div class="about-info">
+    <div class="about-name"><%- theme.about.name %></div>
+    <div class="about-intro"><%- theme.about.introduce || theme.about.intro %></div>
+
+    <div class="about-icons">
+      <% for (const each of theme.about.icons || []) { %>
+        <% 
+          <!-- 是否含二维码 -->
+          var isQr = !!each.qrcode 
+          <!-- 是否是图片类型（type: 'img'） -->
+          var isImg = each.type === 'img'
+          <!-- 是否有 tip 提示文本（用于 aria-label） -->
+          var hasTip = each.tip 
+        %>
+
+        <!-- 如果是二维码图标（不是超链接） -->
+        <span 
+          class="<%= isQr ? 'qr-trigger' : '' %> <%= hasTip ? 'hint--bottom hint--rounded' : '' %>"
+          <% if (hasTip) { %> aria-label="<%= each.tip %>" <% } %>
+        >
+          <% if (isQr) { %>
+            <% if (isImg) { %>
+              <!-- 显示图片图标 -->
+              <img class="about-icon-img" src="<%= url_for(each.src) %>" alt="icon">
+            <% } else { %>
+              <!-- 显示字体图标 -->
+              <i class="<%= each.class %>" aria-hidden="true"></i>
+            <% } %>
+            <!-- 悬浮显示二维码 -->
+            <img class="qr-img" src="<%= url_for(each.qrcode) %>" alt="qrcode" />
+          <% } else { %>
+            <!-- 如果不是二维码，而是常规链接图标 -->
+            <a 
+              href="<%= url_for(each.link || '#') %>" 
+              target="_blank" 
+              rel="noopener"
+              class="<%= hasTip ? 'hint--bottom hint--rounded' : '' %>" 
+              <% if (hasTip) { %> aria-label="<%= each.tip %>" <% } %>
+            >
+              <% if (isImg) { %>
+                <!-- 链接里的图片图标 -->
+                <img class="about-icon-img" src="<%= url_for(each.src) %>" alt="icon">
+              <% } else { %>
+                <!-- 链接里的字体图标 -->
+                <i class="<%= each.class %>" aria-hidden="true"></i>
+              <% } %>
+            </a>
+          <% } %>
+        </span>
+      <% } %>
+</div>
+
+
+  </div>
+</div>
+
+<article class="about-content page-content mt-5">
+  <div class="markdown-body">
+    <%- page.content %>
+  </div>
+
+  <% if(page.comments) { %>
+    <!-- Comments -->
+    <article id="comments">
+      <% var type %>
+      <% if (typeof page.comment === 'string' && page.comment !== '') { %>
+        <% type = '_partials/comments/' + page.comment %>
+      <% } else { %>
+        <% type = '_partials/comments/' + theme.post.comments.type %>
+      <% } %>
+      <%- partial(type) %>
+    </article>
+  <% } %>
+</article>
+
+<%- partial('_partials/markdown-plugins') %>
