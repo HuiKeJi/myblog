@@ -20,4 +20,3 @@ Fluid.boot.refresh = function() {
 document.addEventListener('DOMContentLoaded', function() {
   Fluid.boot.registerEvents();
 });
-

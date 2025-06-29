@@ -1,4 +1,4 @@
-<% if (page.total > 1){ %>
+<% if (page.total > 1) { %>
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
       <%- paginator({
@@ -6,9 +6,21 @@
         next_text: '<i class="iconfont icon-arrowright"></i>',
         mid_size: 2,
         end_size: 1,
-        format: `${config.pagination_dir}/%d/${theme.scroll_down_arrow.scroll_after_turning_page ? '#board' : ''}`,
+        format: config.pagination_dir + '/%d/#board',
         escape: false
       }) %>
     </span>
   </nav>
+
+  <script>
+    // 在分页渲染后修复第一页链接
+    document.addEventListener('DOMContentLoaded', () => {
+      const pageLinks = document.querySelectorAll('#pagination a');
+      pageLinks.forEach(link => {
+        if (link.textContent.trim() === '1') {
+          link.setAttribute('href', '/#board');
+        }
+      });
+    });
+  </script>
 <% } %>
